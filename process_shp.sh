@@ -41,18 +41,14 @@ echo "Unzipping data..."
 cd unzipped
 # unzip "../${FILEPATH}"
 
-
-OIFS=$IFS
-IFS='.'
-
 echo "Processing data files..."
 for FILE in * # cycles through all files in directory (case-sensitive!)
 do
     echo "converting file: $FILE..."
-    FILENEW=`echo $FILE | sed "^\.[\w]+$"` # replaces old filename
-    # NEWFILE= echo $OUTPUT
+    EXT=${FILE##*.}
+    NEWFILE="${OUTPUT}.${EXT}"
     echo $NEWFILE
-    # FILENEW=`echo $FILE | sed "s/.mif/_new.shp/"` # replaces old filename
+    mv "${FILE}" "${NEWFILE}"
     # ogr2ogr \
     # -f "ESRI Shapefile" \
     # "$FILENEW" "$FILE"
@@ -62,7 +58,6 @@ done
 echo "Finishing up"
 cd ../
 # rm -rf unzipped/
-IFS=$OIFS
 
 
 
