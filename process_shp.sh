@@ -56,6 +56,7 @@ done
 
 
 echo "Finishing up"
+zip -r $OUTPUT.zip unzipped/
 cd ../
 # rm -rf unzipped/
 
