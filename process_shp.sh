@@ -36,37 +36,42 @@ fi
 
 
 echo "Unzipping data..."
-# mkdir unzipped
+mkdir unzipped
 
 cd unzipped
-# unzip "../${FILEPATH}"
+unzip "../${FILEPATH}"
 
 echo "Processing data files..."
+OUTFILE=$OUTPUT
+
+
+ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ../$OUTFILE *.shp
+cd ../$OUTFILE
+
+
 for FILE in * # cycles through all files in directory (case-sensitive!)
 do
     echo "converting file: $FILE..."
     EXT=${FILE##*.}
-    INFILE="${OUTPUT}.${EXT}"
-    echo $INFILE
-    mv "${FILE}" "${INFILE}"
-    OUTFILE='something'
-    ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326"  $OUTFILE $INFILE
+    # FILENAME=${FILE%.*}
+    OUTFILE="${OUTPUT}.${EXT}"
+    echo $OUTFILE
+    mv "${FILE}" "${OUTFILE}"
+    echo $OUTPUT
     zip $OUTPUT.zip ${OUTFILE}
 done
 
 
 echo "Finishing up"
+
+
 cd ../
-mv unzipped/$OUTPUT.zip ./$OUTPUT.zip
-# ogr2ogr \
-# -f "ESRI Shapefile" \
-# $OUTPUT.zip
-# unzip ./$OUTPUT.zip
-# ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $OUTPUT.zip $OUTPUT.zip
-# "$FILENEW" "$FILE"
-# zip -r $OUTPUT.zip . -i unzipped/
-# rm -rf unzipped/
+mv $OUTPUT/$OUTPUT.zip ./$OUTPUT.zip
 
+rm -rf $OUTPUT/
+rm -rf unzipped/
 
+ls | grep $OUTPUT
+rm $OUTPUT.zip
 
 exit 0
