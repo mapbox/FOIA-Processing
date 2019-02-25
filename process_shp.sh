@@ -46,11 +46,13 @@ for FILE in * # cycles through all files in directory (case-sensitive!)
 do
     echo "converting file: $FILE..."
     EXT=${FILE##*.}
-    NEWFILE="${OUTPUT}.${EXT}"
-    echo $NEWFILE
-    mv "${FILE}" "${NEWFILE}"
-    # ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $NEWFILE
-    zip $OUTPUT.zip ${NEWFILE}
+    INFILE="${OUTPUT}.${EXT}"
+    echo $INFILE
+    mv "${FILE}" "${INFILE}"
+    OUTFILE=$INFILE
+    ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $INFILE $OUTFILE
+    # ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $INFILE
+    zip $OUTPUT.zip ${OUTFILE}
 done
 
 
@@ -61,7 +63,7 @@ mv unzipped/$OUTPUT.zip ./$OUTPUT.zip
 # -f "ESRI Shapefile" \
 # $OUTPUT.zip
 # unzip ./$OUTPUT.zip
-ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $OUTPUT.zip
+# ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $OUTPUT.zip $OUTPUT.zip
 # "$FILENEW" "$FILE"
 # zip -r $OUTPUT.zip . -i unzipped/
 # rm -rf unzipped/
