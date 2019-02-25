@@ -49,15 +49,20 @@ do
     NEWFILE="${OUTPUT}.${EXT}"
     echo $NEWFILE
     mv "${FILE}" "${NEWFILE}"
-    # ogr2ogr \
-    # -f "ESRI Shapefile" \
-    # "$FILENEW" "$FILE"
+    zip $OUTPUT.zip ${NEWFILE}
 done
 
 
 echo "Finishing up"
-zip -r $OUTPUT.zip unzipped/
 cd ../
+mv unzipped/$OUTPUT.zip ./$OUTPUT.zip
+# ogr2ogr \
+# -f "ESRI Shapefile" \
+# $OUTPUT.zip
+unzip ./$OUTPUT.zip
+ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ./$OUTPUT.zip
+# "$FILENEW" "$FILE"
+# zip -r $OUTPUT.zip . -i unzipped/
 # rm -rf unzipped/
 
 
