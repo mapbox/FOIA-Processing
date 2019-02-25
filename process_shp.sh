@@ -49,9 +49,8 @@ do
     INFILE="${OUTPUT}.${EXT}"
     echo $INFILE
     mv "${FILE}" "${INFILE}"
-    OUTFILE=$INFILE
-    ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $INFILE $OUTFILE
-    # ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $INFILE
+    OUTFILE='something'
+    ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326"  $OUTFILE $INFILE
     zip $OUTPUT.zip ${OUTFILE}
 done
 
