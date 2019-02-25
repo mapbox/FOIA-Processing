@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e -o pipefail
 
-# open zip
-# go over each file in zip
-# convert each file
-# zip all files
-
 # us-ca-city_of_<X>.zip
 #   - us-ca-city_of_<X>.shp
 #   - us-ca-city_of_<X>.dbf
@@ -20,7 +15,7 @@ if [[ -z $OUTPUT ]]; then
     echo '  ./process_sh <country-region-layer> "path/to/zipfile"'
     echo ""
     echo "Example"
-    echo './process_sh us-ca-city_of_new_york "../Downloads/nyc.zip"'
+    echo './process_sh us-ny-city_of_new_york "../Downloads/nyc.zip"'
     exit
 fi
 
@@ -36,41 +31,37 @@ fi
 
 
 echo "Unzipping data..."
-mkdir unzipped
+# mkdir unzipped
 
 cd unzipped
-unzip "../${FILEPATH}"
+# unzip "../${FILEPATH}"
 
 echo "Processing data files..."
 OUTFILE=$OUTPUT
 
 
 ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ../$OUTFILE *.shp
+ogrinfo -so *.shp
 cd ../$OUTFILE
 
 
-for FILE in * # cycles through all files in directory (case-sensitive!)
+for FILE in *
 do
     echo "converting file: $FILE..."
     EXT=${FILE##*.}
-    # FILENAME=${FILE%.*}
     OUTFILE="${OUTPUT}.${EXT}"
-    echo $OUTFILE
     mv "${FILE}" "${OUTFILE}"
-    echo $OUTPUT
     zip $OUTPUT.zip ${OUTFILE}
 done
 
 
 echo "Finishing up"
-
-
 cd ../
 mv $OUTPUT/$OUTPUT.zip ./$OUTPUT.zip
-
 rm -rf $OUTPUT/
 rm -rf unzipped/
 
+TODO: rm
 ls | grep $OUTPUT
 rm $OUTPUT.zip
 
