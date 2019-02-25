@@ -60,7 +60,7 @@ mv unzipped/$OUTPUT.zip ./$OUTPUT.zip
 # -f "ESRI Shapefile" \
 # $OUTPUT.zip
 unzip ./$OUTPUT.zip
-ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ./$OUTPUT.zip
+ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" $OUTPUT.zip
 # "$FILENEW" "$FILE"
 # zip -r $OUTPUT.zip . -i unzipped/
 # rm -rf unzipped/
