@@ -38,11 +38,17 @@ cd unzipped
 
 echo "Processing data files..."
 OUTFILE=$OUTPUT
-
+echo $OUTFILE
 
 ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ../$OUTFILE *.shp
-ogrinfo -so *.shp
+ogr2ogr -f "Geojson" -t_srs "EPSG:4326" ../$OUTFILE.geojson *.shp
+# ogr2ogr -f "Geojson" -t_srs "EPSG:4326" ../pumpkin.geojson *.shp
+# cat ../pumpkin.geojson | jq .
+# jq '.features[0:1][0].properties |keys' ../pumpkin.geojson
+jq '.features[0:1][0].properties |keys' ../$OUTFILE.geojson
+
 cd ../$OUTFILE
+# ogrinfo -so *.shp
 
 
 for FILE in *
@@ -54,15 +60,26 @@ do
     zip $OUTPUT.zip ${OUTFILE}
 done
 
+SHP=$OUTPUT.shp
+echo $SHP
+
+# QUERY="SELECT * FROM ${SHP%.*} WHERE 1"
+# QUERY="SELECT * FROM apples.shp WHERE 1"
+# echo $QUERY
+
+# ogrinfo -q $SHP -sql "SELECT * FROM apples LIMIT 10"
+# ogr2ogr -f "Geojson" -t_srs "EPSG:4326" $SHP "SELECT * FROM ${SHP%.*} LIMIT 10" -dialect SQLITE
+
 
 echo "Finishing up"
 cd ../
 mv $OUTPUT/$OUTPUT.zip ./$OUTPUT.zip
 rm -rf $OUTPUT/
-rm -rf unzipped/
+# rm -rf unzipped/
 
-TODO: rm
-ls | grep $OUTPUT
+# TODO: rm
 rm $OUTPUT.zip
+rm $OUTPUT.geojson
+# rm pumpkin.geojson
 
 exit 0
