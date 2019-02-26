@@ -46,6 +46,16 @@ ogr2ogr -f "Geojson" -t_srs "EPSG:4326" ../$OUTFILE.geojson *.shp
 # cat ../pumpkin.geojson | jq .
 # jq '.features[0:1][0].properties |keys' ../pumpkin.geojson
 jq '.features[0:1][0].properties |keys' ../$OUTFILE.geojson
+jq '.features[0]' ../$OUTFILE.geojson
+# FEATURES=`jq '.features[0]' ../$OUTFILE.geojson`
+
+for (( i = 0; i < 5; i++ )); do
+    #statements
+    FEATURES="`jq .features[$i] ../$OUTFILE.geojson`"
+    echo $FEATURES
+    echo $FEATURES -o output.json
+done
+echo $FEATURES
 
 cd ../$OUTFILE
 # ogrinfo -so *.shp
