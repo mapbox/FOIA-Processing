@@ -25,7 +25,7 @@ if [[ -z $FILEPATH ]]; then
     echo '  ./process_sh <country-region-layer> "path/to/zipfile"'
     echo ""
     echo "Example"
-    echo './process_sh us-ca-city_of_new_york "../Downloads/nyc.zip"'
+    echo './process_sh us-ny-city_of_new_york "../Downloads/nyc.zip"'
     exit
 fi
 
@@ -44,12 +44,11 @@ echo $OUTFILE
 ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ../$OUTFILE *.shp
 
 # Generate output for open addresses review
-ogr2ogr -f "Geojson" -t_srs "EPSG:4326" ../$OUTFILE.geojson *.shp
-jq '.features[0:1][0].properties |keys' ../$OUTFILE.geojson
+ogr2ogr -f "Geojson" -t_srs "EPSG:4326" $OUTFILE.geojson *.shp
+jq '.features[0:1][0].properties |keys' $OUTFILE.geojson
 
 for (( i = 0; i < 5; i++ )); do
-    FEATURES="`jq .features[$i] ../$OUTFILE.geojson`"
-    (jq .features[$i] ../$OUTFILE.geojson) >> ../$OUTFILE.json
+    (jq .features[$i] $OUTFILE.geojson) >> ../$OUTFILE.json
 done
 cd ../$OUTFILE
 
@@ -60,18 +59,13 @@ do
     EXT=${FILE##*.}
     OUTFILE="${OUTPUT}.${EXT}"
     mv "${FILE}" "${OUTFILE}"
-    zip $OUTPUT.zip ${OUTFILE}
+    zip ../$OUTPUT.zip ${OUTFILE}
 done
 
 # Cleanup
 echo "Finishing up"
 cd ../
-mv $OUTPUT/$OUTPUT.zip ./$OUTPUT.zip
 rm -rf $OUTPUT/
 rm -rf unzipped/
-
-# TODO: rm
-# rm $OUTPUT.zip
-# rm $OUTPUT.geojson
 
 exit 0
