@@ -47,7 +47,7 @@ ogr2ogr -f "ESRI Shapefile" -t_srs "EPSG:4326" ../$OUTFILE *.shp
 ogr2ogr -f "Geojson" -t_srs "EPSG:4326" $OUTFILE.geojson *.shp
 jq '.features[0:1][0].properties |keys' $OUTFILE.geojson
 
-for (( i = 0; i < 5; i++ )); do
+for (( i = 0; i < 10; i++ )); do
     (jq .features[$i] $OUTFILE.geojson) >> ../$OUTFILE.json
 done
 cd ../$OUTFILE
