@@ -23,4 +23,4 @@ Example
 $ ./process_sh us-ny-city_of_new_york "../Downloads/nyc.zip"
 ```
 
-Specific [naming conventions](https://medium.com/@rsinghal757/kadanes-algorithm-dynamic-programming-how-and-why-does-it-work-3fd8849ed73d), as in the above example, for the output should be followed in order to import properly to Open Addresses. 
+Specific [naming conventions](https://github.com/openaddresses/openaddresses/blob/master/CONTRIBUTING.md#attribute-tags), as in the above example, for the output should be followed in order to import properly to Open Addresses. 
